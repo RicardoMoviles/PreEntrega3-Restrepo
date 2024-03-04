@@ -5,6 +5,24 @@ let mejorTasa;
 let diasTasaMasAlta;
 let continuarSimulando;
 
+const links = [
+    {text: "Inicio", url: "../index.html"},
+    {text: "Simulador", url: "../pages/simulador.html"},
+]
+
+
+const navBar = document.getElementById("navBar")
+
+links.forEach(link =>{
+    
+    const ancla = document.createElement('a');
+    ancla.className = "btn btn-dark";
+    ancla.textContent = link.text;
+    ancla.href = link.url;
+    navBar.appendChild(ancla);
+})
+
+
 class Cdt{
     constructor(monto, dias, fechaInicio){
         this.monto = monto;
@@ -96,8 +114,8 @@ function fechaInicio(){
 asignarTexto('#title-cdt','Simulador Rendimientos CDT');
 asignarTexto('#text-description-cdt', 'Por favor ingrese el valor y los meses a los cuales quiere abrir tu CDT');
 
-do{
-    mensajesAlCliente();
+//do{
+    //mensajesAlCliente();
     interesEfectivoAnual = buscarTasa(tiempoDeInversion, montoDeInversion);
     console.log(interesEfectivoAnual);
     buscarMejorTasa(montoDeInversion);
@@ -106,7 +124,7 @@ do{
     let cdt = new Cdt(montoDeInversion, tiempoDeInversion, fechaInicio());
     console.log(cdt);
     continuarSimulando = volverASimular();  
-}while(continuarSimulando == "si");
+//}while(continuarSimulando == "si");
 
 
 

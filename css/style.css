@@ -1,0 +1,17 @@
+.navbar{
+    color: white;
+}
+
+#info-card{
+    width: 50%;
+    margin: 5% auto;
+}
+
+body{
+    background-color: azure;
+}
+
+a {
+    padding-left: 30px;
+    padding-right: 30px;
+}
