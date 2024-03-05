@@ -9,7 +9,7 @@ let cdt;
 
 const links = [
     {text: "Inicio", url: "./index.html"},
-    {text: "Simulador", url: "./simulador.html"},
+    {text: "Simulador", url: "./pages/simulador.html"},
 ]
 
 const navBar = document.getElementById("navBar")
