@@ -19,7 +19,11 @@ links.forEach(link =>{
     const ancla = document.createElement('a');
     ancla.className = "btn btn-dark";
     ancla.textContent = link.text;
-    ancla.href = link.url;
+    if(ancla.href == link.url){
+
+    }else{
+        ancla.href = link.url;
+    }
     navBar.appendChild(ancla);
 })
 
