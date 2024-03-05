@@ -8,8 +8,8 @@ let rendimientos;
 let cdt;
 
 const links = [
-    {text: "Inicio", url: "./index.html"},
-    {text: "Simulador", url: "./pages/simulador.html"},
+    {text: "Inicio", url: "../index.html"},
+    {text: "Simulador", url: "../pages/simulador.html"},
 ]
 
 const navBar = document.getElementById("navBar")
@@ -19,7 +19,11 @@ links.forEach(link =>{
     const ancla = document.createElement('a');
     ancla.className = "btn btn-dark";
     ancla.textContent = link.text;
-    ancla.href = link.url;
+    if(ancla.href == link.url){
+
+    }else{
+        ancla.href = link.url;
+    }
     navBar.appendChild(ancla);
 })
 
