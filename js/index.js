@@ -4,17 +4,18 @@ let interesEfectivoAnual;
 let mejorTasa;
 let diasTasaMasAlta;
 let continuarSimulando;
+let rendimientos;
+let cdt;
 
 const links = [
     {text: "Inicio", url: "../index.html"},
     {text: "Simulador", url: "../pages/simulador.html"},
 ]
 
-
 const navBar = document.getElementById("navBar")
 
 links.forEach(link =>{
-    
+
     const ancla = document.createElement('a');
     ancla.className = "btn btn-dark";
     ancla.textContent = link.text;
@@ -23,24 +24,15 @@ links.forEach(link =>{
 })
 
 
-class Cdt{
-    constructor(monto, dias, fechaInicio){
-        this.monto = monto;
-        this.dias = dias;
-        this.fechaInicio = fechaInicio;
-        //this.fechaFin = fechaFin;
-    }
-}
-
 let tablaTasas = [
-    [9.4, 9.5, 10.4, 10.5, 10.6, 10.75, 10.65, 10.25, 9.5, 9.2, 9.2, 9.2],
-    [9.4, 9.5, 10.4, 10.5, 10.6, 10.75, 10.65, 10.25, 9.6, 9.3, 9.3, 9.3],
-    [9.5, 9.6, 10.5, 10.6, 10.7, 10.85, 10.75, 10.35, 9.7, 9.4, 9.4, 9.4],
-    [9.6, 9.7, 10.6, 10.65, 10.75, 10.9, 10.8, 10.45, 9.8, 9.5, 9.5, 9.5],
-    [9.6, 9.7, 10.6, 10.65, 10.75, 10.9, 10.8, 10.45, 9.8, 9.5, 9.5, 9.5],
-    [9.7, 9.8, 10.7, 10.75, 10.85, 11.00, 10.9, 10.55, 9.9, 9.6, 9.6, 9.6],
-    [9.7, 9.8, 10.7, 10.75, 10.85, 11.00, 10.9, 10.55, 9.9, 9.6, 9.6, 9.6],
-    [9.3, 9.4, 10.2, 10.25, 10.35, 10.45, 10.4, 10.4, 9.6, 9.3, 9.3, 9.3],
+        [9.4, 9.5, 10.4, 10.5, 10.6, 10.75, 10.65, 10.25, 9.5, 9.2, 9.2, 9.2],
+        [9.4, 9.5, 10.4, 10.5, 10.6, 10.75, 10.65, 10.25, 9.6, 9.3, 9.3, 9.3],
+        [9.5, 9.6, 10.5, 10.6, 10.7, 10.85, 10.75, 10.35, 9.7, 9.4, 9.4, 9.4],
+        [9.6, 9.7, 10.6, 10.65, 10.75, 10.9, 10.8, 10.45, 9.8, 9.5, 9.5, 9.5],
+        [9.6, 9.7, 10.6, 10.65, 10.75, 10.9, 10.8, 10.45, 9.8, 9.5, 9.5, 9.5],
+        [9.7, 9.8, 10.7, 10.75, 10.85, 11.00, 10.9, 10.55, 9.9, 9.6, 9.6, 9.6],
+        [9.7, 9.8, 10.7, 10.75, 10.85, 11.00, 10.9, 10.55, 9.9, 9.6, 9.6, 9.6],
+        [9.3, 9.4, 10.2, 10.25, 10.35, 10.45, 10.4, 10.4, 9.6, 9.3, 9.3, 9.3],
 ];
 let rangoDias = [30, 60, 90, 120, 150, 180, 240, 360, 540, 720, 1080, 1440, 1799];
 let rangoMontos = [500, 5000, 20000, 50000, 200000, 500000, 1000000, 5000000];
@@ -50,13 +42,53 @@ function asignarTexto (elemento, texto){
     elementoHTML.innerHTML = texto;
 }
 
+class Cdt{
+    constructor(monto, dias, fechaInicio, rendimientos, interes){
+        this.monto = monto;
+        this.dias = dias;
+        this.fechaInicio = fechaInicio;
+        this.rendimientos = rendimientos;
+        this.interes = interes;
+    }
+    montoDias(){
+        return `Si inviertes <b>${this.monto}</b> por <b>${this.dias}</b> días`;
+    }
+    rendimiento(){
+        return `Tu rendimiento será de <b>${this.rendimientos}</b>`;
+    }
+    tasa(){
+        return `Con una tasa de <b>${this.interes}</b>`;
+    }
+    fecha(){
+        return `Fecha de Inicio CDT <b>${this.fechaInicio}</b>`;
+    }
+}
+
+function crearTarjeta (monto, dias, rendimientos, interes){
+    cdt = new Cdt(monto, dias, fechaInicio(), rendimientos, interes);
+    const cdtCard = document.getElementById("cdtCard")
+    cdtCard.innerHTML = `
+                    <div class="card" id="info-card-rendimiento">
+                        <div class="card-body">
+                        <h5 class="card-title">RENDIMIENTO</h5>
+                        <p>${cdt.montoDias()}</p>
+                        <p>${cdt.rendimiento()}</p>
+                        <p>${cdt.tasa()}</p>
+                        <p>${cdt.fecha()}</p>
+                        <p><b>${(interes == mejorTasa)? "Puedes obtener la mayor tasa de interes con el tiempo escogido": 
+                        `La mejor tasa es de ${mejorTasa} entre ${rangoDias[diasTasaMasAlta]} y ${rangoDias[diasTasaMasAlta+1]-1} días`}</b></p>
+                        </div>
+                    </div>
+                    `
+}
+
 function buscarFilaTasas(monto){
-    const filaTablaTasas = (elemento) => elemento <= monto 
+    const filaTablaTasas = (elemento) => elemento <= monto
     return rangoMontos.findLastIndex(filaTablaTasas);
 }
 
 function buscarColumnaTasas(dias){
-    const columnaTablaTasas = (elemento) => elemento <= dias 
+    const columnaTablaTasas = (elemento) => elemento <= dias
     return rangoDias.findLastIndex(columnaTablaTasas);
 }
 
@@ -65,37 +97,14 @@ function buscarTasa (dias, monto){
 }
 
 function buscarMejorTasa(monto){
-    tasasrespectivasMonto = tablaTasas.at(buscarFilaTasas(monto));
+    let tasasrespectivasMonto = tablaTasas.at(buscarFilaTasas(monto));
     mejorTasa = Math.max(...tasasrespectivasMonto);
     diasTasaMasAlta = tasasrespectivasMonto.indexOf(mejorTasa);
-    console.log(`La mejor tasa es de ${mejorTasa} entre ${rangoDias[diasTasaMasAlta]} y ${rangoDias[diasTasaMasAlta+1]-1} días`);
 }
 
 function calcularRendimiento(monto, dias){
-    let interes = buscarTasa(dias, monto);
-    let rendimientos = Math.round(((monto*interes)/100)*((dias*30)/360));
-    console.log(`Si inviertes ${monto} por ${dias} días`);
-    console.log(`Tu rendimiento será de ${rendimientos}`);
-
-    if(interes < mejorTasa){
-        buscarMejorTasa(monto);
-    }else if (interes == mejorTasa){
-        console.log("Puedes obtener la mayor tasa de interes con el tiempo escogido")
-    }
-}
-
-function mensajesAlCliente(){
-    montoDeInversion =parseInt(prompt('Por favor ingrese el valor que quiere invertir (minimo 500)'));
-    tiempoDeInversion = parseInt(prompt('Por favor indique a cuantos días quiere su CDT (minimo 30 maximo 1799)'));
-    if(montoDeInversion < 500 || tiempoDeInversion <30) { 
-        alert("Ingresa valores validos");
-        mensajesAlCliente();
-    }    
-}
-
-function volverASimular(){
-    let respuesta = prompt("Deseas volver a simular si/no").toLowerCase();
-    return respuesta;
+    rendimientos = Math.round(((monto*interesEfectivoAnual)/100)*((dias)/360));
+    crearTarjeta(monto, dias, rendimientos, interesEfectivoAnual);
 }
 
 function fechaInicio(){
@@ -103,28 +112,35 @@ function fechaInicio(){
     return fechaInicio.getDate() + "-"+ (fechaInicio.getMonth()+1) + "-" +fechaInicio.getFullYear();;
 }
 
-// function fechaFin(tiempo){
-//     const fechaFin = fechaInicio().getDatetiempo.getMonth()+mpo;
-//     console.log(fechaFin);
-// }
+const form = document.getElementById("my-form");
 
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+	const data = new FormData(event.target);
+	montoDeInversion = data.get("monto");
+	tiempoDeInversion = data.get("tiempo");
+    if(montoDeInversion < 500 || tiempoDeInversion <30) {
+        alert("Ingresa valores validos");
+    }
+    interesEfectivoAnual = buscarTasa(tiempoDeInversion, montoDeInversion);
+    buscarMejorTasa(montoDeInversion);
+    calcularRendimiento(montoDeInversion, tiempoDeInversion);
 
+    const cdtJSON = JSON.stringify(cdt);
+    localStorage.setItem("cdt", cdtJSON);
+    const cdtEnElLocal = localStorage.getItem("cdt");
+    //JSON.parse, convierte el JSON, de string a objeto. 
+    const cdtObjeto = JSON.parse(cdtEnElLocal);
+    console.log(cdtObjeto); 
+});
 
 
 asignarTexto('#title-cdt','Simulador Rendimientos CDT');
-asignarTexto('#text-description-cdt', 'Por favor ingrese el valor y los meses a los cuales quiere abrir tu CDT');
+asignarTexto('#text-description-cdt', 'Por favor ingrese el valor que quiere invertir (minimo 500) y a cuantos días quiere su CDT (minimo 30 maximo 1799)');
 
-//do{
-    //mensajesAlCliente();
-    interesEfectivoAnual = buscarTasa(tiempoDeInversion, montoDeInversion);
-    console.log(interesEfectivoAnual);
-    buscarMejorTasa(montoDeInversion);
-    calcularRendimiento(montoDeInversion, tiempoDeInversion); 
-    console.log(`Fecha de Inicio CDT ${fechaInicio()}`);
-    let cdt = new Cdt(montoDeInversion, tiempoDeInversion, fechaInicio());
-    console.log(cdt);
-    continuarSimulando = volverASimular();  
-//}while(continuarSimulando == "si");
+
+
+
 
 
 
